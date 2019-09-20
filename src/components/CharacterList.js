@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components"
+import { Link } from 'react-router-dom'
 
 const SecCon = styled.section`
   display: flex;
@@ -11,6 +12,10 @@ const SecCon = styled.section`
 const DivCon = styled.div`
   width: 30%;
   margin: 1rem;
+`;
+
+const HomeLink = styled.div`
+  font-size: 3rem;
 `;
 
 export default function CharacterList() {
@@ -39,6 +44,10 @@ export default function CharacterList() {
           <p>Species: {char.species}</p>
         </DivCon>
       ))}
+      <HomeLink>
+        <Link to={`/`}>Home</Link>
+      </HomeLink>
+      
     </SecCon>
   );
 }

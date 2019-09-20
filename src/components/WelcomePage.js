@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 
 export default function WelcomePage() {
   return (
@@ -11,6 +12,8 @@ export default function WelcomePage() {
           alt="rick"
         />
       </header>
+
+      <Link to={`/characters`}>Click here for character list!</Link>
     </section>
   );
 }
