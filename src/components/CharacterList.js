@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components"
 import { Link } from 'react-router-dom'
+// import FormikSearchForm from './SearchForm'
 
 const SecCon = styled.section`
   display: flex;
@@ -21,6 +22,10 @@ const HomeLink = styled.div`
 export default function CharacterList() {
   // TODO: Add useState to track data from useEffect
   const [character, setCharacter] = useState([])
+  const [search, setSearch] = useState({
+    searchBar: ''
+  })
+
 
   useEffect(() => {
     axios
@@ -36,14 +41,42 @@ export default function CharacterList() {
     //  Important: verify the 2nd `useEffect` parameter: the dependancies array!
   }, []);
 
+ 
+  const addSearch = search => {
+    const newSearch = {
+      id: Date.now(),
+      searchBar: search.searchBar 
+    };
+    setSearch({...search, newSearch});
+  };
+
+  const onSearch = e => {
+    setSearch({...search, [e.target.name]: e.target.value})
+    console.log(search)
+}
+
+  const handleSubmit = event => {
+    event.prventDefault()
+    addSearch(search)
+    setSearch({searchBar: ''})
+  }
+
+  
+
   return (
     <SecCon className="character-list">
-      {character.map(char => (
+      {/* <FormikSearchForm character={character}/> */}
+      <form onSubmit={event => handleSubmit(event)}>
+       <input type="search" name="searchBar" placeholder="Search" onChange={onSearch} value={search.searchBar}/>
+       <button onSubmit={() => handleSubmit()}>Submit!</button>
+       {character.map(char => (
         <DivCon key={char.id}>
           <p>Name: {char.name}</p>
           <p>Species: {char.species}</p>
         </DivCon>
       ))}
+     </form>
+      
       <HomeLink>
         <Link to={`/`}>Home</Link>
       </HomeLink>
