@@ -22,11 +22,19 @@ const HomeLink = styled.div`
 export default function CharacterList() {
   // TODO: Add useState to track data from useEffect
   const [character, setCharacter] = useState([])
-  const [search, setSearch] = useState({
-    searchBar: ''
-  })
+  const [search, setSearch] = useState("");
 
+  useEffect(() => {
+    const results = character.filter(characters =>
+      characters.name.toLowerCase().includes(search)
+    );
+    setCharacter(results);
+  }, [search]);
+  
+  const handleChange = event => {
 
+    setSearch(event.target.value);
+  };
   useEffect(() => {
     axios
       .get(`https://rickandmortyapi.com/api/character/`)
@@ -41,41 +49,28 @@ export default function CharacterList() {
     //  Important: verify the 2nd `useEffect` parameter: the dependancies array!
   }, []);
 
- 
-  const addSearch = search => {
-    const newSearch = {
-      id: Date.now(),
-      searchBar: search.searchBar 
-    };
-    setSearch({...search, newSearch});
-  };
-
-  const onSearch = e => {
-    setSearch({...search, [e.target.name]: e.target.value})
-    console.log(search)
-}
-
-  const handleSubmit = event => {
-    event.prventDefault()
-    addSearch(search)
-    setSearch({searchBar: ''})
-  }
-
   
 
   return (
     <SecCon className="character-list">
       {/* <FormikSearchForm character={character}/> */}
-      <form onSubmit={event => handleSubmit(event)}>
-       <input type="search" name="searchBar" placeholder="Search" onChange={onSearch} value={search.searchBar}/>
-       <button onSubmit={() => handleSubmit()}>Submit!</button>
-       {character.map(char => (
+      <form>
+        <label for="name">Search:</label>
+        <input
+          id="name"
+          type="text"
+          name="textfield"
+          placeholder="Search"
+          value={search}
+          onChange={handleChange}
+        />
+      </form>
+     {character.map(char => (
         <DivCon key={char.id}>
           <p>Name: {char.name}</p>
           <p>Species: {char.species}</p>
         </DivCon>
       ))}
-     </form>
       
       <HomeLink>
         <Link to={`/`}>Home</Link>
